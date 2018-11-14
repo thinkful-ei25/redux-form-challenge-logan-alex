@@ -6,10 +6,28 @@ import { sendFeedback } from '../actions';
 
 class FeedbackForm extends React.Component {
   render() {
+  let successMessage;
+  if(this.props.submitSucceeded) {
+    successMessage = (
+      <div className= "message-success">
+        Your complaint has been submitted successfully!
+      </div>
+    );
+  }
+
+  let errorMessage;
+  if(this.props.error) {
+    errorMessage = (
+      <div className="message=error">{this.props.error}</div>
+    )
+  }
+
     return (
       <form onSubmit={
         this.props.handleSubmit(values => this.props.dispatch(sendFeedback(values)))
       }>
+      {successMessage}
+      {errorMessage}
         <label htmlFor="trackingNumber">Tracking Number</label>
         <Field component={Input} element="input" type="text" name="trackingNumber" id="trackingNumber" validate={[required, isNumber]}></Field>
         <label htmlFor="issue">What is your issue?</label>
