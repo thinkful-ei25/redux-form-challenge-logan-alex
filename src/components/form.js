@@ -8,17 +8,17 @@ class FeedbackForm extends React.Component {
   render() {
     return (
       <form onSubmit={
-        this.props.handleSubmit(values => sendFeedback(values))
+        this.props.handleSubmit(values => this.props.dispatch(sendFeedback(values)))
       }>
-        <label htmlFor="tracking-number">Tracking Number</label>
-        <Field component={Input} element="input" type="text" name="tracking-number" id="tracking-number" validate={[required, isNumber]}></Field>
+        <label htmlFor="trackingNumber">Tracking Number</label>
+        <Field component={Input} element="input" type="text" name="trackingNumber" id="trackingNumber" validate={[required, isNumber]}></Field>
         <label htmlFor="issue">What is your issue?</label>
-        <Field component="select" id="issue" name="issue">
-          <option value="My delivery hasn\'t arrived">My delivery hasn't arrived</option>
-          <option value="The wrong item was delievered">The wrong item was delievered</option>
-          <option value="Part of my order was missing">Part of my order was missing</option>
-          <option value="Some of my order arrived damaged">Some of my order arrived damaged</option>
-          <option value="Other">Other (give details below)</option>
+        <Field component="select" id="issue" name="issue" validate={[required]}>
+          <option value="not-delivered">My delivery hasn't arrived</option>
+          <option value="wrong-item">The wrong item was delievered</option>
+          <option value="missing-part">Part of my order was missing</option>
+          <option value="damaged">Some of my order arrived damaged</option>
+          <option value="other">Other (give details below)</option>
         </Field>
         <label htmlFor="details">Give more details (optional)</label>
         <Field component="textarea" id="details" name="details"></Field>
@@ -30,6 +30,9 @@ class FeedbackForm extends React.Component {
 
 export default reduxForm({
   form: 'feedback',
+  initialValues: {
+    issue: "not-delivered"
+  },
   onSubmitFail: (errors, dispatch) =>
     dispatch(focus('feedback', Object.keys(errors)[0]))
 })(FeedbackForm);
